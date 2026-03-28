@@ -111,11 +111,12 @@ Version      : 1.0
 	
     // Datatable
 
-    if ($('.datatable').length > 0) {
-        $('.datatable').DataTable({
-            "bFilter": false,
-        });
-    }
+    /* if ($('.datatable').length > 0) {
+    $('.datatable').DataTable({
+        "bFilter": false,
+    });
+}
+*/
 
 	// Check all email
 	

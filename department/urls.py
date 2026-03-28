@@ -1,0 +1,12 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # Le chemin pour voir la liste des départements
+    path('list/', views.department_list, name='department_list'),
+    
+    # Le chemin pour ajouter un département
+    path('add/', views.add_department, name='add_department'),
+    path('edit/<int:id>/', views.edit_department, name='edit_department'),
+    path('delete/<int:id>/', views.delete_department, name='delete_department'),
+]

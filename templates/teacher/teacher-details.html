@@ -1,0 +1,89 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="page-title">Teacher Details</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'teacher_list' %}">Teachers</a></li>
+                        <li class="breadcrumb-item active">Teacher Details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="about-info">
+                            <h4>Profile of {{ teacher.first_name }} {{ teacher.last_name }}</h4>
+                            
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <ul class="list-unstyled">
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Teacher ID: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.teacher_id }}</span>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Department: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.department.department_name }}</span>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Gender: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.gender }}</span>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Date of Birth: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.date_of_birth|date:"d M Y" }}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <ul class="list-unstyled">
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Mobile: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.mobile_number }}</span>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Joining Date: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.joining_date|date:"d M Y" }}</span>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Experience: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.experience }}</span>
+                                                </li>
+                                                <li class="mb-3">
+                                                    <span class="text-muted">Address: </span>
+                                                    <span class="font-weight-bold ml-2">{{ teacher.address }}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <a href="{% url 'edit_teacher' teacher.id %}" class="btn btn-primary">Edit Profile</a>
+                                            <a href="{% url 'teacher_list' %}" class="btn btn-secondary ml-2">Back to List</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

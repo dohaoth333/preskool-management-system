@@ -1,0 +1,108 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Edit Teacher</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="{% url 'edit_teacher' teacher.id %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="form-title"><span>Basic Details</span></h5>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Teacher ID</label>
+                                        <input type="text" class="form-control" name="teacher_id" value="{{ teacher.teacher_id }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" class="form-control" name="first_name" value="{{ teacher.first_name }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control" name="last_name" value="{{ teacher.last_name }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <select class="form-control" name="gender" required>
+                                            <option value="Female" {% if teacher.gender == 'Female' %}selected{% endif %}>Female</option>
+                                            <option value="Male" {% if teacher.gender == 'Male' %}selected{% endif %}>Male</option>
+                                            <option value="Others" {% if teacher.gender == 'Others' %}selected{% endif %}>Others</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Date of Birth</label>
+                                        <input type="date" class="form-control" name="date_of_birth" value="{{ teacher.date_of_birth|date:'Y-m-d' }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Mobile</label>
+                                        <input type="text" class="form-control" name="mobile_number" value="{{ teacher.mobile_number }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Joining Date</label>
+                                        <input type="date" class="form-control" name="joining_date" value="{{ teacher.joining_date|date:'Y-m-d' }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Experience</label>
+                                        <input type="text" class="form-control" name="experience" value="{{ teacher.experience }}" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Department</label>
+                                        <select class="form-control" name="department_id" required>
+                                            {% for dept in departments %}
+                                                <option value="{{ dept.id }}" {% if teacher.department.id == dept.id %}selected{% endif %}>
+                                                    {{ dept.department_name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <textarea class="form-control" name="address" required>{{ teacher.address }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="page-title">Welcome {{ request.user.first_name|default:"Professeur" }}!</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Teacher Dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                <div class="card bg-nine w-100">
+                    <div class="card-body">
+                        <div class="db-widgets d-flex justify-content-between align-items-center">
+                            <div class="db-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="db-info">
+                                <h3>140</h3>
+                                <h6>Total Students</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                <div class="card bg-six w-100">
+                    <div class="card-body">
+                        <div class="db-widgets d-flex justify-content-between align-items-center">
+                            <div class="db-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="db-info">
+                                <h3>05</h3>
+                                <h6>Total Classes</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                <div class="card bg-ten w-100">
+                    <div class="card-body">
+                        <div class="db-widgets d-flex justify-content-between align-items-center">
+                            <div class="db-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="db-info">
+                                <h3>12</h3>
+                                <h6>Total Lessons</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 col-12 d-flex">
+                <div class="card bg-eleven w-100">
+                    <div class="card-body">
+                        <div class="db-widgets d-flex justify-content-between align-items-center">
+                            <div class="db-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="db-info">
+                                <h3>15/20</h3>
+                                <h6>Hours/Week</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-8 col-xl-8 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <h5 class="card-title">Upcoming Classes</h5>
+                            </div>
+                            <div class="col-6">
+                                <span class="float-right view-link"><a href="#">View All</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Class Group</th>
+                                        <th>Subject</th>
+                                        <th>Time</th>
+                                        <th>Room</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>IDAI - S5</td>
+                                        <td>Développement Web Avancé</td>
+                                        <td>09:00 AM - 11:00 AM</td>
+                                        <td>Amphi B</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Génie Informatique</td>
+                                        <td>Bases de données</td>
+                                        <td>11:15 AM - 01:15 PM</td>
+                                        <td>Salle 10</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4 col-xl-4 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-header">
+                        <h5 class="card-title">Notifications</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="teaching-card">
+                            <ul class="activity-feed">
+                                <li class="feed-item">
+                                    <div class="feed-date">Aujourd'hui</div>
+                                    <span class="feed-text">N'oubliez pas d'ajouter les notes des examens.</span>
+                                </li>
+                                <li class="feed-item">
+                                    <div class="feed-date">Demain</div>
+                                    <span class="feed-text">Réunion de département à 14h.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

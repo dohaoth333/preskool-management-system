@@ -1,0 +1,75 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Teachers</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'teacher_list' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Teachers</li>
+                    </ul>
+                </div>
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="{% url 'add_teacher' %}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Department</th>
+                                        <th>Mobile</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for teacher in teachers %}
+                                    <tr>
+                                        <td>{{ teacher.teacher_id }}</td>
+                                        <td>
+                                            <h2 class="table-avatar">
+                                                <h2><a href="{% url 'view_teacher' teacher.id %}">{{ teacher.first_name }} {{ teacher.last_name }}</a></h2>
+                                            </h2>
+                                        </td>
+                                        <td>{{ teacher.gender }}</td>
+                                        <td>{{ teacher.department.department_name }}</td>
+                                        <td>{{ teacher.mobile_number }}</td>
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                <a href="{% url 'edit_teacher' teacher.id %}" class="btn btn-sm bg-success-light mr-2">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <a href="{% url 'delete_teacher' teacher.id %}" class="btn btn-sm bg-danger-light">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No Teachers Found!</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
