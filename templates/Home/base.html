@@ -109,7 +109,7 @@
                            {% endif %}
                         </ul>
                      </li>
-                     {% if user.is_admin or user.is_superuser %}
+                     {% if user.is_admin or user.is_superuser or user.is_teacher %}
                      <li class="submenu">
                         <a href="#"><i class="fas fa-user-graduate"></i> <span> Students</span> <span class="menu-arrow"></span></a>
                         <ul>
@@ -117,6 +117,8 @@
                            <li><a href="{% url 'add_student' %}">Student Add</a></li>
                         </ul>
                      </li>
+                     {% endif %}
+                     {% if user.is_admin or user.is_superuser %}
                      <li class="submenu">
                         <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Teachers</span> <span class="menu-arrow"></span></a>
                         <ul>
@@ -136,7 +138,9 @@
                         <a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'subject_list' %}">Subject List</a></li>
+                           {% if user.is_admin or user.is_superuser or user.is_teacher %}
                            <li><a href="{% url 'add_subject' %}">Subject Add</a></li>
+                           {% endif %}
                         </ul>
                      </li>
                      <li class="menu-title">

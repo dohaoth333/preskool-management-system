@@ -14,7 +14,9 @@
                     </ul>
                 </div>
                 <div class="col-auto text-right float-right ml-auto">
+                    {% if user.is_admin or user.is_superuser %}
                     <a href="{% url 'add_subject' %}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -56,12 +58,14 @@
                                         <td><span class="badge badge-secondary">{{ subject.credits }} cr.</span></td>
                                         <td class="text-right">
                                             <div class="actions">
+                                                {% if user.is_admin or user.is_superuser %}
                                                 <a href="{% url 'edit_subject' subject.pk %}" class="btn btn-sm bg-success-light mr-1" title="Modifier">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
                                                 <a href="{% url 'delete_subject' subject.pk %}" class="btn btn-sm bg-danger-light" title="Supprimer">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
+                                                {% endif %}
                                             </div>
                                         </td>
                                     </tr>

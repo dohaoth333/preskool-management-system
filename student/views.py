@@ -2,21 +2,21 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Student, Parent
-from home_auth.decorators import admin_required
+from home_auth.decorators import admin_required, admin_or_teacher_required
 
 # --- Affiche le Dashboard spÃ©cifique de l'Ã©tudiant (accessible Ã  tous les connectÃ©s) ---
 @login_required(login_url='login')
 def student_dashboard(request):
     return render(request, 'students/student-dashboard.html')
 
-# --- Affiche la liste des étudiants --- ADMIN seulement
-@admin_required
+# --- Affiche la liste des étudiants --- ADMIN et TEACHER
+@admin_or_teacher_required
 def student_list(request):
     students = Student.objects.all()
     return render(request, 'students/students.html', {'student_list': students})
 
-# --- Gère l'ajout d'un étudiant --- ADMIN seulement
-@admin_required
+# --- Gère l'ajout d'un étudiant --- ADMIN et TEACHER
+@admin_or_teacher_required
 def add_student(request):
     if request.method == 'POST':
         # 1. RÃ©cupÃ©rer les donnÃ©es de l'Ã©tudiant
@@ -79,14 +79,14 @@ def add_student(request):
 
     return render(request, 'students/add-student.html')
 
-# --- Affiche les détails d'un étudiant --- ADMIN seulement
-@admin_required
+# --- Affiche les détails d'un étudiant --- ADMIN et TEACHER
+@admin_or_teacher_required
 def view_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     return render(request, 'students/student-details.html', {'student': student})
 
-# --- Formulaire et logique de modification --- ADMIN seulement
-@admin_required
+# --- Formulaire et logique de modification --- ADMIN et TEACHER
+@admin_or_teacher_required
 def edit_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     
@@ -109,8 +109,8 @@ def edit_student(request, pk):
 
     return render(request, 'students/edit-student.html', {'student': student})
 
-# --- Supprime un étudiant --- ADMIN seulement
-@admin_required
+# --- Supprime un étudiant --- ADMIN et TEACHER
+@admin_or_teacher_required
 def delete_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
     student.delete()

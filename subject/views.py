@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Subject
 from department.models import Department
 from teacher.models import Teacher
-from home_auth.decorators import admin_required
+from home_auth.decorators import admin_required, admin_or_teacher_required
 
 
 # 1. Liste des matières — visible par TOUS les utilisateurs connectés
@@ -15,7 +15,7 @@ def subject_list(request):
 
 
 # 2. Ajouter une matière — ADMIN seulement
-@admin_required
+@admin_or_teacher_required
 def add_subject(request):
     departments = Department.objects.all()
     teachers = Teacher.objects.all()
@@ -50,7 +50,7 @@ def add_subject(request):
 
 
 # 3. Modifier une matière — ADMIN seulement
-@admin_required
+@admin_or_teacher_required
 def edit_subject(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     departments = Department.objects.all()
@@ -79,7 +79,7 @@ def edit_subject(request, pk):
 
 
 # 4. Supprimer une matière — ADMIN seulement
-@admin_required
+@admin_or_teacher_required
 def delete_subject(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     subject.delete()
