@@ -2,23 +2,24 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Student, Parent
+from home_auth.decorators import admin_required
 
-# --- Affiche le Dashboard spécifique de l'étudiant ---
+# --- Affiche le Dashboard spÃ©cifique de l'Ã©tudiant (accessible Ã  tous les connectÃ©s) ---
 @login_required(login_url='login')
 def student_dashboard(request):
     return render(request, 'students/student-dashboard.html')
 
-# --- Affiche la liste des étudiants ---
-@login_required(login_url='login')
+# --- Affiche la liste des étudiants --- ADMIN seulement
+@admin_required
 def student_list(request):
     students = Student.objects.all()
     return render(request, 'students/students.html', {'student_list': students})
 
-# --- Gère l'ajout d'un étudiant ---
-@login_required(login_url='login')
+# --- Gère l'ajout d'un étudiant --- ADMIN seulement
+@admin_required
 def add_student(request):
     if request.method == 'POST':
-        # 1. Récupérer les données de l'étudiant
+        # 1. RÃ©cupÃ©rer les donnÃ©es de l'Ã©tudiant
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         student_id = request.POST.get('student_id')
@@ -31,7 +32,7 @@ def add_student(request):
         section = request.POST.get('section')
         student_image = request.FILES.get('student_image')
 
-        # 2. Récupérer les données du parent
+        # 2. RÃ©cupÃ©rer les donnÃ©es du parent
         father_name = request.POST.get('father_name')
         father_occupation = request.POST.get('father_occupation')
         father_mobile = request.POST.get('father_mobile')
@@ -43,7 +44,7 @@ def add_student(request):
         present_address = request.POST.get('present_address')
         permanent_address = request.POST.get('permanent_address')
 
-        # 3. Créer et sauvegarder le parent
+        # 3. CrÃ©er et sauvegarder le parent
         parent = Parent.objects.create(
             father_name=father_name,
             father_occupation=father_occupation,
@@ -57,7 +58,7 @@ def add_student(request):
             permanent_address=permanent_address
         )
 
-        # 4. Créer l'étudiant lié au parent
+        # 4. CrÃ©er l'Ã©tudiant liÃ© au parent
         student = Student.objects.create(
             first_name=first_name,
             last_name=last_name,
@@ -78,20 +79,19 @@ def add_student(request):
 
     return render(request, 'students/add-student.html')
 
-# --- NOUVEAU : Affiche les détails d'un étudiant spécifique ---
-@login_required(login_url='login')
-def view_student(request, student_id):
-    # On récupère l'étudiant par son student_id ou on renvoie une erreur 404
-    student = get_object_or_404(Student, student_id=student_id)
+# --- Affiche les détails d'un étudiant --- ADMIN seulement
+@admin_required
+def view_student(request, pk):
+    student = get_object_or_404(Student, pk=pk)
     return render(request, 'students/student-details.html', {'student': student})
 
-# --- NOUVEAU : Formulaire et logique de modification ---
-@login_required(login_url='login')
-def edit_student(request, student_id):
-    student = get_object_or_404(Student, student_id=student_id)
+# --- Formulaire et logique de modification --- ADMIN seulement
+@admin_required
+def edit_student(request, pk):
+    student = get_object_or_404(Student, pk=pk)
     
     if request.method == 'POST':
-        # On met à jour les champs de l'étudiant
+        # On met Ã  jour les champs de l'Ã©tudiant
         student.first_name = request.POST.get('first_name')
         student.last_name = request.POST.get('last_name')
         student.gender = request.POST.get('gender')
@@ -99,7 +99,7 @@ def edit_student(request, student_id):
         student.student_class = request.POST.get('student_class')
         student.mobile_number = request.POST.get('mobile_number')
         
-        # Gestion de l'image (seulement si une nouvelle image est téléchargée)
+        # Gestion de l'image (seulement si une nouvelle image est tÃ©lÃ©chargÃ©e)
         if request.FILES.get('student_image'):
             student.student_image = request.FILES.get('student_image')
             
@@ -109,10 +109,10 @@ def edit_student(request, student_id):
 
     return render(request, 'students/edit-student.html', {'student': student})
 
-#  Supprime un étudiant ---
-@login_required(login_url='login')
-def delete_student(request, student_id):
-    student = get_object_or_404(Student, student_id=student_id)
+# --- Supprime un étudiant --- ADMIN seulement
+@admin_required
+def delete_student(request, pk):
+    student = get_object_or_404(Student, pk=pk)
     student.delete()
     messages.success(request, 'Student deleted successfully!')
     return redirect('student_list')

@@ -11,17 +11,17 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, "Connexion réussie !")
-            
-            # --- LOGIQUE DE REDIRECTION SELON LE RÔLE ---
-            if user.is_student:
-                return redirect('student_dashboard')  # Envoie l'élève sur son dashboard
+            # Redirection par rôle
+            if user.is_superuser or user.is_admin:
+                return redirect('index')  # Dashboard Admin
             elif user.is_teacher:
-                return redirect('teacher_dashboard')  # Envoie le prof sur le sien (si tu l'as créé)
+                return redirect('teacher_dashboard')  # Dashboard Prof
+            elif user.is_student:
+                return redirect('student_dashboard')  # Dashboard Étudiant
             else:
-                return redirect('index')  # L'admin va sur le dashboard général
+                return redirect('index')
         else:
-            messages.error(request, "Email ou mot de passe invalide.")
+            messages.error(request, "Email ou mot de passe incorrect.")
             
     return render(request, 'Home/login.html')
 
@@ -78,7 +78,10 @@ def register_user(request):
     # Affichage du formulaire vide (méthode GET)
     return render(request, 'Home/register.html')
 
+from django.views.decorators.http import require_POST
+
 # --- Déconnexion (Logout) ---
+@require_POST
 def logout_user(request):
     logout(request)
     messages.info(request, "Vous avez été déconnecté avec succès.")

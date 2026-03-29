@@ -61,31 +61,29 @@
                </li>
                <li class="nav-item dropdown has-arrow">
                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <span class="user-img"><img class="rounded-circle" src="{%static 'assets/img/profiles/avatar-01.jpg'%}" width="31" alt="Ryan Taylor"></span>
+                  <span class="user-img"><img class="rounded-circle" src="{% static 'assets/img/profiles/avatar-01.jpg'%}" width="31" alt="Ryan Taylor"></span>
                   </a>
                   <div class="dropdown-menu">
                      <div class="user-header">
                         <div class="avatar avatar-sm">
-                           <img src="{%static 'assets/img/profiles/avatar-01.jpg'%}" alt="User Image" class="avatar-img rounded-circle">
+                           <img src="{% static 'assets/img/profiles/avatar-01.jpg'%}" alt="User Image" class="avatar-img rounded-circle">
                         </div>
                         <div class="user-text">
-                        <h6>{{ user.username }}</h6>
-                        <p class="text-muted mb-0">
-                           {% if user.is_admin or user.is_superuser %}
-                                 Administrateur
-                           {% elif user.is_teacher %}
-                                 Professeur
-                           {% elif user.is_student %}
-                                 Étudiant
-                           {% else %}
-                                 Utilisateur
-                           {% endif %}
-                        </p>
+                           <h6>{{ user.username }}</h6>
+                           <p class="text-muted mb-0">
+                              {% if user.is_superuser or user.is_admin %}Administrateur
+                              {% elif user.is_teacher %}Professeur
+                              {% elif user.is_student %}Étudiant
+                              {% else %}Utilisateur{% endif %}
+                           </p>
                         </div>
                      </div>
-                     <a class="dropdown-item" href="profile.html">My Profile</a>
-                     <a class="dropdown-item" href="inbox.html">Inbox</a>
-                     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                     <a class="dropdown-item" href="#">My Profile</a>
+                     <a class="dropdown-item" href="#">Inbox</a>
+                     <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;">Logout</button>
+                     </form>
                   </div>
                </li>
             </ul>
@@ -97,55 +95,48 @@
                      <li class="menu-title">
                         <span>Main Menu</span>
                      </li>
-                    <li class="submenu active">
-    <a href="#"><i class="fas fa-user-graduate"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
-    <ul>
-        {% if user.is_admin or user.is_superuser %}
-            <li><a href="{% url 'index' %}">Admin Dashboard</a></li>
-        {% endif %}
-        
-        {% if user.is_teacher %}
-            <li><a href="#">Teacher Dashboard</a></li>
-        {% endif %}
-
-        {% if user.is_student %}
-            <li><a href="{% url 'student_dashboard' %}">Student Dashboard</a></li>
-        {% endif %}
-    </ul>
-</li>
-                     </li>
-                     <li class="submenu">
-                     <a href="#"><i class="fas fa-user-graduate"></i> <span> Students</span> <span class="menu-arrow"></span></a>
+                     <li class="submenu active">
+                        <a href="#"><i class="fas fa-tachometer-alt"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
                         <ul>
-                           <li><a href="{% url 'student_list' %}">Student List</a></li>
-        
-                           <li><a href="{% url 'add_student' %}">Student Add</a></li>
-        
+                           {% if user.is_admin or user.is_superuser %}
+                           <li><a href="{% url 'index' %}">Admin Dashboard</a></li>
+                           {% endif %}
+                           {% if user.is_teacher %}
+                           <li><a href="#">Teacher Dashboard</a></li>
+                           {% endif %}
+                           {% if user.is_student %}
+                           <li><a href="{% url 'student_dashboard' %}">Student Dashboard</a></li>
+                           {% endif %}
                         </ul>
                      </li>
                      {% if user.is_admin or user.is_superuser %}
                      <li class="submenu">
+                        <a href="#"><i class="fas fa-user-graduate"></i> <span> Students</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                           <li><a href="{% url 'student_list' %}">Student List</a></li>
+                           <li><a href="{% url 'add_student' %}">Student Add</a></li>
+                        </ul>
+                     </li>
+                     <li class="submenu">
                         <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Teachers</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'teacher_list' %}">Teacher List</a></li>
-                           <li><a href="{% url 'add_teacher' %}">Teacher Add</a>></li>
+                           <li><a href="{% url 'add_teacher' %}">Teacher Add</a></li>
                         </ul>
                      </li>
-                     
                      <li class="submenu">
                         <a href="#"><i class="fas fa-building"></i> <span> Departments</span> <span class="menu-arrow"></span></a>
                         <ul>
                            <li><a href="{% url 'department_list' %}">Department List</a></li>
                            <li><a href="{% url 'add_department' %}">Department Add</a></li>
-                           
                         </ul>
                      </li>
+                     {% endif %}
                      <li class="submenu">
                         <a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span class="menu-arrow"></span></a>
                         <ul>
-                           <li><a href="subjects.html">Subject List</a></li>
-                           <li><a href="add-subject.html">Subject Add</a></li>
-                           <li><a href="edit-subject.html">Subject Edit</a></li>
+                           <li><a href="{% url 'subject_list' %}">Subject List</a></li>
+                           <li><a href="{% url 'add_subject' %}">Subject Add</a></li>
                         </ul>
                      </li>
                      <li class="menu-title">
@@ -162,7 +153,6 @@
                            <li><a href="add-salary.html">Add Salary</a></li>
                         </ul>
                      </li>
-                     {% endif %}
                      <li>
                         <a href="holiday.html"><i class="fas fa-holly-berry"></i> <span>Holiday</span></a>
                      </li>
@@ -265,6 +255,7 @@
          {% endblock %}
 
       </div>
+
       <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
       <script src="{% static 'assets/js/popper.min.js' %}"></script>
       <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
@@ -272,12 +263,12 @@
       <script src="{% static 'assets/js/script.js' %}"></script>
 
       <script type="text/javascript">
-         document.addEventListener('DOMContentLoaded', function() {
+          document.addEventListener('DOMContentLoaded', function() {
               // Select the notification dropdown element
-            const notiDropdown = document.querySelector('.noti-dropdown');
-            const clearAllBtn = document.querySelector('.clear-noti');
+              const notiDropdown = document.querySelector('.noti-dropdown');
+              const clearAllBtn = document.querySelector('.clear-noti');
       
-            if (notiDropdown) {
+              if (notiDropdown) {
                   // Add a click event listener to the notification dropdown
                   notiDropdown.addEventListener('click', function() {
                       const url = "";
