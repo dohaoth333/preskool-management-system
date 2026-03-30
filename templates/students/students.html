@@ -41,8 +41,10 @@
                                         <td>
                                             {% if student.student_image %}
                                                 <img src="{{ student.student_image.url }}" alt="{{ student.first_name }}" class="avatar-img rounded-circle" style="width:40px;height:40px;object-fit:cover;">
-                                            {% else %}
+                                            {% elif student.gender == 'Female' %}
                                                 <img src="{% static 'assets/img/profiles/avatar-01.jpg' %}" alt="Avatar" class="avatar-img rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+                                            {% else %}
+                                                <img src="{% static 'assets/img/profiles/avatar-03.jpg' %}" alt="Avatar" class="avatar-img rounded-circle" style="width:40px;height:40px;object-fit:cover;">
                                             {% endif %}
                                         </td>
                                         <td>{{ student.student_id }}</td>

@@ -23,7 +23,7 @@
                         <div class="about-info">
                             <h4>About Me</h4>
                             <div class="media mt-3">
-                                <img src="{% if student.student_image %}{{ student.student_image.url }}{% else %}{% static 'assets/img/user.jpg' %}{% endif %}" 
+                                <img src="{% if student.student_image %}{{ student.student_image.url }}{% elif student.gender == 'Female' %}{% static 'assets/img/profiles/avatar-01.jpg' %}{% else %}{% static 'assets/img/profiles/avatar-03.jpg' %}{% endif %}" 
                                      class="mr-3" alt="Student Image" style="width: 120px; border-radius: 10px;">
                                 
                                 <div class="media-body">
