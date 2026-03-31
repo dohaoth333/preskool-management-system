@@ -1,0 +1,92 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Emploi du Temps</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active">Emploi du Temps</li>
+                    </ul>
+                </div>
+                
+                {% if not request.user.is_student %}
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="{% url 'add_timetable' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter un cours</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Jour</th>
+                                        <th>Classe</th>
+                                        <th>Matière</th>
+                                        <th>Professeur</th>
+                                        <th>Horaire</th>
+                                        {% if not request.user.is_student %}
+                                        <th class="text-right">Action</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cours in timetables %}
+                                    <tr>
+                                        <td><strong>{{ cours.day }}</strong></td>
+                                        <td>{{ cours.class_name }}</td>
+                                        <td>{{ cours.subject_name }}</td>
+                                        <td>{{ cours.teacher_name }}</td>
+                                        <td><span class="badge badge-info">{{ cours.start_time|time:"H:i" }} - {{ cours.end_time|time:"H:i" }}</span></td>
+                                        
+                                        {% if not request.user.is_student %}
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                <a href="{% url 'edit_timetable' cours.id %}" class="btn btn-sm bg-success-light mr-2">
+                                                    <i class="fas fa-pen"></i> Modifier
+                                                </a>
+                                                <a href="{% url 'delete_timetable' cours.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Voulez-vous vraiment supprimer ce cours ?');">
+                                                    <i class="fas fa-trash"></i> Supprimer
+                                                </a>
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">Aucun cours n'est programmé.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
