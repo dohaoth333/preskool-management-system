@@ -157,8 +157,14 @@
                            <li><a href="add-salary.html">Add Salary</a></li>
                         </ul>
                      </li>
-                     <li>
-                        <a href="holiday.html"><i class="fas fa-holly-berry"></i> <span>Holiday</span></a>
+                     <li class="submenu">
+                        <a href="#"><i class="fas fa-holly-berry"></i> <span>Jours Fériés</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                           <li><a href="{% url 'holiday_list' %}">Liste des Jours Fériés</a></li>
+                           {% if user.is_admin or user.is_superuser %}
+                           <li><a href="{% url 'add_holiday' %}">Ajouter un Jour Férié</a></li>
+                           {% endif %}
+                        </ul>
                      </li>
                      <li>
                         <a href="fees.html"><i class="fas fa-comment-dollar"></i> <span>Fees</span></a>

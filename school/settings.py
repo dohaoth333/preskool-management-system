@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'teacher',
     'department',
     'subject',
+    'holiday',
 ]
 
 MIDDLEWARE = [

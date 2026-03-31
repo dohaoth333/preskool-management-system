@@ -1,0 +1,260 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Jours Fériés</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Jours Fériés</li>
+                    </ul>
+                </div>
+                {% if user.is_admin or user.is_superuser %}
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="{% url 'add_holiday' %}" class="btn btn-primary">
+                        <i class="fas fa-plus mr-1"></i> Ajouter
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Messages flash -->
+        {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Jours fériés à venir -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            <i class="fas fa-calendar-check text-success mr-2"></i>
+                            Jours Fériés à Venir
+                            <span class="badge badge-success ml-2">{{ upcoming_holidays.count }}</span>
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nom</th>
+                                        <th>Date de Début</th>
+                                        <th>Date de Fin</th>
+                                        <th>Durée</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        {% if user.is_admin or user.is_superuser %}
+                                        <th class="text-right">Action</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holiday in upcoming_holidays %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <h2><a>{{ holiday.name }}</a></h2>
+                                        </td>
+                                        <td>{{ holiday.start_date|date:"d/m/Y" }}</td>
+                                        <td>{{ holiday.end_date|date:"d/m/Y" }}</td>
+                                        <td>
+                                            <span class="badge badge-pill badge-primary">
+                                                {{ holiday.duration }} jour{{ holiday.duration|pluralize }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if holiday.holiday_type == 'national' %}
+                                                <span class="badge badge-info">National</span>
+                                            {% elif holiday.holiday_type == 'religious' %}
+                                                <span class="badge badge-warning">Religieux</span>
+                                            {% elif holiday.holiday_type == 'school' %}
+                                                <span class="badge badge-success">Scolaire</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">Autre</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ holiday.description|default:"-"|truncatechars:50 }}</td>
+                                        {% if user.is_admin or user.is_superuser %}
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                <a href="{% url 'edit_holiday' holiday.id %}" class="btn btn-sm bg-success-light mr-2" title="Modifier">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm bg-danger-light"
+                                                    data-toggle="modal"
+                                                    data-target="#deleteModal"
+                                                    data-holiday-id="{{ holiday.id }}"
+                                                    data-holiday-name="{{ holiday.name }}"
+                                                    title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-4">
+                                            <i class="fas fa-calendar-times fa-2x mb-2 d-block"></i>
+                                            Aucun jour férié à venir.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jours fériés passés -->
+        {% if past_holidays %}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-header">
+                        <h4 class="card-title">
+                            <i class="fas fa-history text-muted mr-2"></i>
+                            Jours Fériés Passés
+                            <span class="badge badge-secondary ml-2">{{ past_holidays.count }}</span>
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nom</th>
+                                        <th>Date de Début</th>
+                                        <th>Date de Fin</th>
+                                        <th>Durée</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        {% if user.is_admin or user.is_superuser %}
+                                        <th class="text-right">Action</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holiday in past_holidays %}
+                                    <tr class="text-muted">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <h2><a>{{ holiday.name }}</a></h2>
+                                        </td>
+                                        <td>{{ holiday.start_date|date:"d/m/Y" }}</td>
+                                        <td>{{ holiday.end_date|date:"d/m/Y" }}</td>
+                                        <td>
+                                            <span class="badge badge-pill badge-secondary">
+                                                {{ holiday.duration }} jour{{ holiday.duration|pluralize }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if holiday.holiday_type == 'national' %}
+                                                <span class="badge badge-info">National</span>
+                                            {% elif holiday.holiday_type == 'religious' %}
+                                                <span class="badge badge-warning">Religieux</span>
+                                            {% elif holiday.holiday_type == 'school' %}
+                                                <span class="badge badge-success">Scolaire</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">Autre</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ holiday.description|default:"-"|truncatechars:50 }}</td>
+                                        {% if user.is_admin or user.is_superuser %}
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                <a href="{% url 'edit_holiday' holiday.id %}" class="btn btn-sm bg-success-light mr-2" title="Modifier">
+                                                    <i class="fas fa-pen"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm bg-danger-light"
+                                                    data-toggle="modal"
+                                                    data-target="#deleteModal"
+                                                    data-holiday-id="{{ holiday.id }}"
+                                                    data-holiday-name="{{ holiday.name }}"
+                                                    title="Supprimer">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Modal de confirmation de suppression -->
+{% if user.is_admin or user.is_superuser %}
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Confirmer la suppression
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer le jour férié <strong id="holidayNameText"></strong> ?</p>
+                <p class="text-muted small">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <form id="deleteForm" method="POST" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash mr-1"></i>Supprimer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var holidayId = button.getAttribute('data-holiday-id');
+        var holidayName = button.getAttribute('data-holiday-name');
+        document.getElementById('holidayNameText').textContent = '"' + holidayName + '"';
+        document.getElementById('deleteForm').action = '/holiday/delete/' + holidayId + '/';
+    });
+});
+</script>
+{% endif %}
+
+{% endblock %}
