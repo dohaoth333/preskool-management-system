@@ -1,0 +1,68 @@
+{% extends 'Home/base.html' %} 
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Mon Bulletin de Notes</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active">Mes Notes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Examen</th>
+                                        <th>Matière</th>
+                                        <th>Date de l'examen</th>
+                                        <th>Ma Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for note in mes_notes %}
+                                    <tr>
+                                        <td><strong>{{ note.exam.name }}</strong></td>
+                                        <td>{{ note.exam.subject }}</td>
+                                        <td>{{ note.exam.exam_date|date:"d M Y" }}</td>
+                                        <td><span class="badge badge-success" style="font-size: 14px;">{{ note.marks }} / 20</span></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center">Aucune note n'a encore été publiée pour vous.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

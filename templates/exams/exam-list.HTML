@@ -1,0 +1,92 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Planification des Examens</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active">Examens</li>
+                    </ul>
+                </div>
+                
+                {% if not request.user.is_student %}
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="{% url 'add_exam' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Planifier un examen</a>
+                    <a href="{% url 'add_result' %}" class="btn btn-success"><i class="fas fa-pen"></i> Saisir des notes</a>
+                    <a href="{% url 'result_list' %}" class="btn btn-info"><i class="fas fa-list"></i> Voir les résultats</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Nom de l'examen</th>
+                                        <th>Classe</th>
+                                        <th>Matière</th>
+                                        <th>Date prévue</th>
+                                        {% if not request.user.is_student %}
+                                        <th class="text-right">Action</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for exam in exams %}
+                                    <tr>
+                                        <td><strong>{{ exam.name }}</strong></td>
+                                        <td>{{ exam.exam_class }}</td>
+                                        <td>{{ exam.subject }}</td>
+                                        <td>{{ exam.exam_date|date:"d M Y" }}</td>
+                                        
+                                        {% if not request.user.is_student %}
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                <a href="{% url 'edit_exam' exam.id %}" class="btn btn-sm bg-success-light mr-2">
+                                                    <i class="fas fa-pen"></i> Modifier
+                                                </a>
+                                                <a href="{% url 'delete_exam' exam.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet examen ? Toutes les notes associées seront également supprimées.');">
+                                                    <i class="fas fa-trash"></i> Supprimer
+                                                </a>
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">Aucun examen n'a encore été planifié.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
