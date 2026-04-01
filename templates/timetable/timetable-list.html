@@ -1,0 +1,204 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        
+        <!-- En-tête de page -->
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Emploi du Temps</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Tableau de bord</a></li>
+                        <li class="breadcrumb-item active">Emploi du Temps</li>
+                    </ul>
+                </div>
+                <div class="col-auto text-right float-right ml-auto">
+                    {% if not request.user.is_student %}
+                    <a href="{% url 'add_timetable' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Ajouter un cours
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages flash -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Tableau des cours -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Jour</th>
+                                        <th>Classe</th>
+                                        <th>Matière</th>
+                                        <th>Professeur</th>
+                                        <th>Horaire</th>
+                                        {% if not request.user.is_student %}
+                                        <th class="text-right">Action</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cours in timetables %}
+                                    <tr>
+                                        <td><strong>{{ cours.day }}</strong></td>
+                                        <td>{{ cours.class_name }}</td>
+                                        <td>{{ cours.subject_name }}</td>
+                                        <td>{{ cours.teacher_name }}</td>
+                                        <td>
+                                            <span class="badge badge-info" style="font-size: 13px;">
+                                                {{ cours.start_time|time:"H:i" }} - {{ cours.end_time|time:"H:i" }}
+                                            </span>
+                                        </td>
+                                        {% if not request.user.is_student %}
+                                        <td class="text-right">
+                                            <div class="actions">
+                                                <a href="{% url 'edit_timetable' cours.id %}" class="btn btn-sm bg-success-light mr-2">
+                                                    <i class="fas fa-pen"></i> Modifier
+                                                </a>
+                                                <a href="{% url 'delete_timetable' cours.id %}" 
+                                                   class="btn btn-sm bg-danger-light"
+                                                   onclick="return confirm('Voulez-vous vraiment supprimer ce cours ?');">
+                                                    <i class="fas fa-trash"></i> Supprimer
+                                                </a>
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">
+                                            <i class="fas fa-calendar-times fa-2x mb-2 d-block"></i>
+                                            Aucun cours n'est programmé.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Visual Timetabling -->
+        <div class="row mt-4">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            Intégration Visual Timetabling
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">
+                            Exportez l'emploi du temps pour l'importer dans
+                            <strong>Visual Timetabling</strong> ou tout autre agenda.
+                        </p>
+
+                        <div class="row">
+
+                            <!-- Export JSON -->
+                            <div class="col-md-4 mb-3">
+                                <div class="card border-warning h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-code fa-2x text-warning mb-2"></i>
+                                        <h6 class="card-title">Export JSON</h6>
+                                        <p class="card-text text-muted small">
+                                            Données brutes pour développeurs<br>
+                                            ou intégration API.
+                                        </p>
+                                        <a href="{% url 'export_timetable_json' %}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-download mr-1"></i> Télécharger JSON
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Export CSV -->
+                            <div class="col-md-4 mb-3">
+                                <div class="card border-primary h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-file-csv fa-2x text-primary mb-2"></i>
+                                        <h6 class="card-title">Export CSV</h6>
+                                        <p class="card-text text-muted small">
+                                            Format reconnu par Visual Timetabling.<br>
+                                            Fichier → Importer dans VT.
+                                        </p>
+                                        <a href="{% url 'export_csv' %}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-download mr-1"></i> Télécharger CSV
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Export ICS -->
+                            <div class="col-md-4 mb-3">
+                                <div class="card border-success h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-calendar-check fa-2x text-success mb-2"></i>
+                                        <h6 class="card-title">Export ICS</h6>
+                                        <p class="card-text text-muted small">
+                                            Compatible Outlook, Google Calendar,<br>
+                                            Thunderbird et Visual Timetabling.
+                                        </p>
+                                        <a href="{% url 'export_ics' %}" class="btn btn-success btn-sm">
+                                            <i class="fas fa-download mr-1"></i> Télécharger ICS
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Instructions d'import -->
+                        <div class="alert alert-light border mt-2" role="alert">
+                            <strong>
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Comment importer dans Visual Timetabling :
+                            </strong>
+                            <ol class="mb-0 mt-2 small">
+                                <li>Télécharger le fichier <strong>CSV</strong> ci-dessus</li>
+                                <li>Ouvrir Visual Timetabling sur votre ordinateur</li>
+                                <li>Aller dans <strong>Fichier → Importer → TXT/CSV</strong></li>
+                                <li>Sélectionner le fichier téléchargé et assigner les colonnes</li>
+                            </ol>
+                        </div>
+
+                        <!-- Lien vers le site VT -->
+                        <div class="mt-3">
+                            <a href="https://www.visual-timetabling.be/" 
+                               target="_blank" 
+                               class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-external-link-alt mr-1"></i>
+                                Ouvrir Visual Timetabling
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -11,7 +11,10 @@ urlpatterns = [
     path('teacher/', include('teacher.urls')),
     path('subject/', include('subject.urls')),
     path('holiday/', include('holiday.urls')),
+    path('exam/', include('exam.urls')),
+    path('timetable/', include('timetable.urls')),
     path('', include('faculty.urls'))
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
