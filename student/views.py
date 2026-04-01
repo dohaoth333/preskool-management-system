@@ -4,7 +4,7 @@ from django.contrib import messages
 from .models import Student, Parent
 from home_auth.decorators import admin_required, admin_or_teacher_required
 
-# --- Affiche le Dashboard spÃ©cifique de l'Ã©tudiant (accessible Ã  tous les connectÃ©s) ---
+# --- Affiche le Dashboard  
 @login_required(login_url='login')
 def student_dashboard(request):
     return render(request, 'students/student-dashboard.html')
@@ -86,23 +86,25 @@ def view_student(request, pk):
     return render(request, 'students/student-details.html', {'student': student})
 
 # --- Formulaire et logique de modification --- ADMIN et TEACHER
+# --- Formulaire et logique de modification --- ADMIN et TEACHER
 @admin_or_teacher_required
-def edit_student(request, pk):
-    student = get_object_or_404(Student, pk=pk)
-    
+def edit_student(request, student_id):
+    # On récupère l'étudiant via son matricule (student_id) et non plus par son ID technique (pk)
+    student = get_object_or_404(Student, student_id=student_id)
+
     if request.method == 'POST':
-        # On met Ã  jour les champs de l'Ã©tudiant
+        # On met à jour les champs de l'étudiant
         student.first_name = request.POST.get('first_name')
         student.last_name = request.POST.get('last_name')
         student.gender = request.POST.get('gender')
         student.date_of_birth = request.POST.get('date_of_birth')
         student.student_class = request.POST.get('student_class')
         student.mobile_number = request.POST.get('mobile_number')
-        
-        # Gestion de l'image (seulement si une nouvelle image est tÃ©lÃ©chargÃ©e)
+
+        # Gestion de l'image (seulement si une nouvelle image est téléchargée)
         if request.FILES.get('student_image'):
             student.student_image = request.FILES.get('student_image')
-            
+
         student.save()
         messages.success(request, 'Student updated successfully!')
         return redirect('student_list')

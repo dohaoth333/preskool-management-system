@@ -60,7 +60,7 @@
                                                 <a href="{% url 'view_student' student.pk %}" class="btn btn-sm bg-info-light mr-1" title="Voir détails">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{% url 'edit_student' student.pk %}" class="btn btn-sm bg-success-light mr-1" title="Modifier">
+                                                <a href="{% url 'edit_student' student.student_id %}" class="btn btn-sm bg-success-light mr-2">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
                                                 <a href="{% url 'delete_student' student.pk %}" class="btn btn-sm bg-danger-light" title="Supprimer">

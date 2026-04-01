@@ -14,8 +14,8 @@ urlpatterns = [
     # 4. Voir les détails d'un étudiant (par pk)
     path('view/<int:pk>/', views.view_student, name='view_student'),
 
-    # 5. Modifier un étudiant (par pk)
-    path('edit/<int:pk>/', views.edit_student, name='edit_student'),
+    # 5. Modifier un étudiant
+    path('edit/<str:student_id>/', views.edit_student, name='edit_student'),
 
     # 6. Supprimer un étudiant (par pk)
     path('delete/<int:pk>/', views.delete_student, name='delete_student'),
