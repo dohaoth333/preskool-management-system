@@ -13,10 +13,8 @@ Projet développé dans le cadre du module **Développement Web Avancé - Back-e
 
 
 
-https://github.com/user-attachments/assets/e7b8b0aa-f4b9-43b9-a7ec-f0d737b24816
 
-
-
+https://github.com/user-attachments/assets/6d675fb3-32e3-4a3a-97e0-62635742bbb9
 
 
 ---
