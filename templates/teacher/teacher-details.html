@@ -41,6 +41,10 @@
                                                     <span class="font-weight-bold ml-2">{{ teacher.gender }}</span>
                                                 </li>
                                                 <li class="mb-3">
+                                                    <span class="text-muted">Email: </span>
+                                                    <span class="font-weight-bold ml-2">{% if teacher_email %}{{ teacher_email }}{% else %}Non renseigné{% endif %}</span>
+                                                </li>
+                                                <li class="mb-3">
                                                     <span class="text-muted">Date of Birth: </span>
                                                     <span class="font-weight-bold ml-2">{{ teacher.date_of_birth|date:"d M Y" }}</span>
                                                 </li>

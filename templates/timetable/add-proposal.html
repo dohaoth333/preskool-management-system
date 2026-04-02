@@ -8,78 +8,93 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Add un Cours</h3>
+                    <h3 class="page-title">Request Schedule</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'timetable_list' %}">Timetable</a></li>
-                        <li class="breadcrumb-item active">Add</li>
+                        <li class="breadcrumb-item"><a href="{% url 'timetable_list' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'my_proposals' %}">Proposals</a></li>
+                        <li class="breadcrumb-item active">Request Schedule</li>
                     </ul>
                 </div>
             </div>
         </div>
 
+        <!-- Flash messages -->
+        {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <form method="POST" action="{% url 'add_timetable' %}">
+                        <form method="POST" action="{% url 'add_proposal' %}">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-12">
-                                    <h5 class="form-title"><span>Class Details</span></h5>
+                                    <h5 class="form-title"><span>New Proposal</span></h5>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Teacher Name</label>
-                                        <input type="text" class="form-control" name="teacher_name" required>
+                                        <label>Class</label>
+                                        <input type="text" class="form-control" name="class_name" placeholder="e.g. Informatique - A (1)" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Subject</label>
-                                        <input type="text" class="form-control" name="subject_name" required>
+                                        <input type="text" class="form-control" name="subject_name" placeholder="Enter Subject Name" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Class (e.g. IDAI - S5)</label>
-                                        <input type="text" class="form-control" name="class_name" required>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Day of week</label>
+                                        <label>Day</label>
                                         <select class="form-control" name="day" required>
                                             <option value="">-- Choose a day --</option>
-                                            <option value="Monday">Monday</option>
-                                            <option value="Tuesday">Tuesday</option>
-                                            <option value="Wednesday">Wednesday</option>
-                                            <option value="Thursday">Thursday</option>
-                                            <option value="Friday">Friday</option>
-                                            <option value="Saturday">Saturday</option>
+                                            {% for day_val, day_label in days %}
+                                                <option value="{{ day_val }}">{{ day_label }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-sm-6">
+                                <div class="col-12 col-sm-3">
                                     <div class="form-group">
                                         <label>Start Time</label>
                                         <input type="time" class="form-control" name="start_time" required>
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-sm-6">
+                                <div class="col-12 col-sm-3">
                                     <div class="form-group">
                                         <label>End Time</label>
                                         <input type="time" class="form-control" name="end_time" required>
                                     </div>
                                 </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Classroom (Optional)</label>
+                                        <input type="text" class="form-control" name="classroom" placeholder="e.g. Room 101">
+                                    </div>
+                                </div>
                                 
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">Save Timetable</button>
+                                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                                    <a href="{% url 'my_proposals' %}" class="btn btn-secondary ml-2">Cancel</a>
                                 </div>
                             </div>
                         </form>

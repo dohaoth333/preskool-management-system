@@ -59,12 +59,12 @@
                                         <td class="text-right">
                                             <div class="actions">
                                                 {% if user.is_admin or user.is_superuser or user.is_teacher %}
-                                                <a href="{% url 'edit_subject' subject.pk %}" class="btn btn-sm bg-success-light mr-1" title="Modifier">
+                                                <a href="{% url 'edit_subject' subject.pk %}" class="btn btn-sm bg-success-light mr-1" title="Edit">
                                                     <i class="fas fa-pen"></i>
                                                 </a>
                                                 {% endif %}
                                                 {% if user.is_admin or user.is_superuser %}
-                                                <a href="{% url 'delete_subject' subject.pk %}" class="btn btn-sm bg-danger-light" title="Supprimer">
+                                                <a href="{% url 'delete_subject' subject.pk %}" class="btn btn-sm bg-danger-light" title="Delete">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                                 {% endif %}

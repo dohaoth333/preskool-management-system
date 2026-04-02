@@ -72,7 +72,7 @@
                            <h6>{{ user.username }}</h6>
                            <p class="text-muted mb-0">
                               {% if user.is_superuser or user.is_admin %}Administrateur
-                              {% elif user.is_teacher %}Professeur
+                              {% elif user.is_teacher %}Teacher
                               {% elif user.is_student %}Étudiant
                               {% else %}Utilisateur{% endif %}
                            </p>
@@ -158,11 +158,11 @@
                         </ul>
                      </li>
                      <li class="submenu">
-                        <a href="#"><i class="fas fa-holly-berry"></i> <span>Jours Fériés</span> <span class="menu-arrow"></span></a>
+                        <a href="#"><i class="fas fa-holly-berry"></i> <span>Holidays</span> <span class="menu-arrow"></span></a>
                         <ul>
-                           <li><a href="{% url 'holiday_list' %}">Liste des Jours Fériés</a></li>
+                           <li><a href="{% url 'holiday_list' %}">Holidays List</a></li>
                            {% if user.is_admin or user.is_superuser %}
-                           <li><a href="{% url 'add_holiday' %}">Ajouter un Jour Férié</a></li>
+                           <li><a href="{% url 'add_holiday' %}">Add Holiday</a></li>
                            {% endif %}
                         </ul>
                      </li>
@@ -170,7 +170,7 @@
                         <a href="fees.html"><i class="fas fa-comment-dollar"></i> <span>Fees</span></a>
                      </li>
                      <li>
-                        <a href="{% url 'exam_list' %}">Exam list</a>
+                        <a href="{% url 'exam_list' %}"><i class="fas fa-clipboard-list"></i> <span>Exam list</span></a>
                      </li>
 
                      {% if request.user.is_student %}
@@ -182,8 +182,21 @@
                         <a href="event.html"><i class="fas fa-calendar-day"></i> <span>Events</span></a>
                      </li>
                      <li>
-                        <a href="{% url 'timetable_list' %}"><i class="fas fa-calendar-day"></i> <span>Time Table</span></a>
+                        <a href="{% url 'timetable_list' %}"><i class="fas fa-calendar-alt"></i> <span>Time Table</span></a>
                      </li>
+                     {% if user.is_admin or user.is_superuser %}
+                     <li>
+                        <a href="{% url 'review_proposals' %}"><i class="fas fa-tasks"></i> <span>Review Proposals</span></a>
+                     </li>
+                     {% endif %}
+                     {% if user.is_teacher %}
+                     <li>
+                        <a href="{% url 'my_proposals' %}"><i class="fas fa-paper-plane"></i> <span>My Proposals</span></a>
+                     </li>
+                     <li>
+                        <a href="{% url 'add_proposal' %}"><i class="fas fa-calendar-plus"></i> <span>Request Schedule</span></a>
+                     </li>
+                     {% endif %}
                      <li>
                         <a href="library.html"><i class="fas fa-book"></i> <span>Library</span></a>
                      </li>
@@ -345,6 +358,7 @@
       </script>
       
       
+      {% block custom_js %}{% endblock %}
   </body>
   </html>
   

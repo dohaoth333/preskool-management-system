@@ -8,10 +8,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Modifier un Examen</h3>
+                    <h3 class="page-title">Edit un Examen</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'exam_list' %}">Examens</a></li>
-                        <li class="breadcrumb-item active">Modifier</li>
+                        <li class="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
             </div>
@@ -37,14 +37,14 @@
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Classe concernée</label>
+                                        <label>Class concernée</label>
                                         <input type="text" class="form-control" name="exam_class" value="{{ exam.exam_class }}" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Matière</label>
+                                        <label>Subject</label>
                                         <input type="text" class="form-control" name="subject" value="{{ exam.subject }}" required>
                                     </div>
                                 </div>

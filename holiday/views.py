@@ -6,13 +6,13 @@ from django.contrib import messages
 from datetime import date, datetime
 
 
-# 1. Liste des jours fériés — Accessible à tous les utilisateurs connectés
+# 1. Holidays List — Accessible to all logged-in users
 @login_required(login_url='login')
 def holiday_list(request):
     holidays = Holiday.objects.all()
     today = date.today()
 
-    # Séparer les jours fériés à venir et passés
+    # Separate upcoming and past holidays
     upcoming_holidays = holidays.filter(end_date__gte=today).order_by('start_date')
     past_holidays = holidays.filter(end_date__lt=today).order_by('-start_date')
 
@@ -23,7 +23,7 @@ def holiday_list(request):
     })
 
 
-# 2. Ajouter un jour férié — ADMIN seulement
+# 2. Add a holiday — ADMIN only
 @admin_required
 def add_holiday(request):
     if request.method == 'POST':
@@ -36,20 +36,20 @@ def add_holiday(request):
         # Validation
         errors = []
         if not name:
-            errors.append("Le nom du jour férié est obligatoire.")
+            errors.append("Holiday name is required.")
         if not start_date_str:
-            errors.append("La date de début est obligatoire.")
+            errors.append("Start date is required.")
         if not end_date_str:
-            errors.append("La date de fin est obligatoire.")
+            errors.append("End date is required.")
 
         if not errors:
             try:
                 start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
                 end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
                 if end_date < start_date:
-                    errors.append("La date de fin doit être égale ou postérieure à la date de début.")
+                    errors.append("End date must be equal to or after the start date.")
             except ValueError:
-                errors.append("Le format de date est invalide.")
+                errors.append("Invalid date format.")
 
         if errors:
             for error in errors:
@@ -65,13 +65,13 @@ def add_holiday(request):
             holiday_type=holiday_type,
             description=description,
         )
-        messages.success(request, f'✅ Le jour férié "{name}" a été ajouté avec succès.')
+        messages.success(request, f'✅ The holiday "{name}" has been added successfully.')
         return redirect('holiday_list')
 
     return render(request, 'holiday/add-holiday.html')
 
 
-# 3. Modifier un jour férié — ADMIN seulement
+# 3. Edit a holiday — ADMIN only
 @admin_required
 def edit_holiday(request, id):
     holiday = get_object_or_404(Holiday, id=id)
@@ -86,20 +86,20 @@ def edit_holiday(request, id):
         # Validation
         errors = []
         if not name:
-            errors.append("Le nom du jour férié est obligatoire.")
+            errors.append("Holiday name is required.")
         if not start_date_str:
-            errors.append("La date de début est obligatoire.")
+            errors.append("Start date is required.")
         if not end_date_str:
-            errors.append("La date de fin est obligatoire.")
+            errors.append("End date is required.")
 
         if not errors:
             try:
                 start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
                 end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
                 if end_date < start_date:
-                    errors.append("La date de fin doit être égale ou postérieure à la date de début.")
+                    errors.append("End date must be equal to or after the start date.")
             except ValueError:
-                errors.append("Le format de date est invalide.")
+                errors.append("Invalid date format.")
 
         if errors:
             for error in errors:
@@ -112,20 +112,20 @@ def edit_holiday(request, id):
         holiday.holiday_type = holiday_type
         holiday.description = description
         holiday.save()
-        messages.success(request, f'✅ Le jour férié "{name}" a été modifié avec succès.')
+        messages.success(request, f'✅ The holiday "{name}" has been updated successfully.')
         return redirect('holiday_list')
 
     return render(request, 'holiday/edit-holiday.html', {'holiday': holiday})
 
 
-# 4. Supprimer un jour férié — ADMIN seulement (POST uniquement)
+# 4. Delete a holiday — ADMIN only (POST only)
 @admin_required
 def delete_holiday(request, id):
     holiday = get_object_or_404(Holiday, id=id)
     if request.method == 'POST':
         name = holiday.name
         holiday.delete()
-        messages.success(request, f'🗑️ Le jour férié "{name}" a été supprimé.')
+        messages.success(request, f'🗑️ The holiday "{name}" has been deleted.')
         return redirect('holiday_list')
-    # GET : redirige vers la liste (la suppression se fait via modal POST)
+    # GET: redirect to list (deletion happens via POST modal)
     return redirect('holiday_list')

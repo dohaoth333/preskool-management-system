@@ -7,10 +7,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Ajouter un Jour Férié</h3>
+                    <h3 class="page-title">Add Holiday</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'holiday_list' %}">Jours Fériés</a></li>
-                        <li class="breadcrumb-item active">Ajouter</li>
+                        <li class="breadcrumb-item"><a href="{% url 'holiday_list' %}">Holidays</a></li>
+                        <li class="breadcrumb-item active">Add Holiday</li>
                     </ul>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 {% for message in messages %}
                 <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
                     {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -40,12 +40,12 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-12">
-                                    <h5 class="form-title"><span>Détails du Jour Férié</span></h5>
+                                    <h5 class="form-title"><span>Détails du Holiday</span></h5>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Nom du jour férié <span class="text-danger">*</span></label>
+                                        <label>Holiday Name <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="name"
                                             placeholder="Ex: Aïd El Fitr"
                                             value="{{ form_data.name|default:'' }}" required>
@@ -56,17 +56,17 @@
                                     <div class="form-group">
                                         <label>Type <span class="text-danger">*</span></label>
                                         <select class="form-control" name="holiday_type" required>
-                                            <option value="national" {% if form_data.holiday_type == 'national' %}selected{% endif %}>Jour Férié National</option>
-                                            <option value="religious" {% if form_data.holiday_type == 'religious' %}selected{% endif %}>Fête Religieuse</option>
-                                            <option value="school" {% if form_data.holiday_type == 'school' %}selected{% endif %}>Vacances Scolaires</option>
-                                            <option value="other" {% if form_data.holiday_type == 'other' %}selected{% endif %}>Autre</option>
+                                            <option value="national" {% if form_data.holiday_type == 'national' %}selected{% endif %}>Holiday National</option>
+                                            <option value="religious" {% if form_data.holiday_type == 'religious' %}selected{% endif %}>Religious Holiday</option>
+                                            <option value="school" {% if form_data.holiday_type == 'school' %}selected{% endif %}>School Holiday</option>
+                                            <option value="other" {% if form_data.holiday_type == 'other' %}selected{% endif %}>Other</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Date de début <span class="text-danger">*</span></label>
+                                        <label>Start Date <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="start_date"
                                             value="{{ form_data.start_date|default:'' }}" required>
                                     </div>
@@ -74,7 +74,7 @@
 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Date de fin <span class="text-danger">*</span></label>
+                                        <label>End Date <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="end_date"
                                             value="{{ form_data.end_date|default:'' }}" required>
                                     </div>
@@ -93,7 +93,7 @@
                                         <i class="fas fa-save mr-1"></i> Enregistrer
                                     </button>
                                     <a href="{% url 'holiday_list' %}" class="btn btn-secondary ml-2">
-                                        <i class="fas fa-times mr-1"></i> Annuler
+                                        <i class="fas fa-times mr-1"></i> Cancel
                                     </a>
                                 </div>
                             </div>

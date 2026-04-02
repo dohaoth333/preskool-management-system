@@ -14,7 +14,7 @@ def subject_list(request):
     return render(request, 'subject/subjects.html', {'subjects': subjects})
 
 
-# 2. Ajouter une matière — ADMIN seulement
+# 2. Add une matière — ADMIN seulement
 @admin_or_teacher_required
 def add_subject(request):
     departments = Department.objects.all()
@@ -40,7 +40,7 @@ def add_subject(request):
             subject.teacher = Teacher.objects.get(id=teacher_id)
         subject.save()
 
-        messages.success(request, 'Matière ajoutée avec succès !')
+        messages.success(request, 'Subject ajoutée avec succès !')
         return redirect('subject_list')
 
     return render(request, 'subject/add-subject.html', {
@@ -49,7 +49,7 @@ def add_subject(request):
     })
 
 
-# 3. Modifier une matière — ADMIN seulement
+# 3. Edit une matière — ADMIN seulement
 @admin_or_teacher_required
 def edit_subject(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
@@ -68,7 +68,7 @@ def edit_subject(request, pk):
         subject.teacher = Teacher.objects.get(id=teacher_id) if teacher_id else None
 
         subject.save()
-        messages.success(request, 'Matière modifiée avec succès !')
+        messages.success(request, 'Subject modifiée avec succès !')
         return redirect('subject_list')
 
     return render(request, 'subject/edit-subject.html', {
@@ -78,10 +78,10 @@ def edit_subject(request, pk):
     })
 
 
-# 4. Supprimer une matière — ADMIN seulement
+# 4. Delete une matière — ADMIN seulement
 @admin_or_teacher_required
 def delete_subject(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     subject.delete()
-    messages.success(request, 'Matière supprimée.')
+    messages.success(request, 'Subject supprimée.')
     return redirect('subject_list')

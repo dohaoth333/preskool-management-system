@@ -1,0 +1,95 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">My Proposals</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'timetable_list' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">My Proposals</li>
+                    </ul>
+                </div>
+                <div class="col-auto text-right float-right ml-auto">
+                    <a href="{% url 'add_proposal' %}" class="btn btn-primary d-flex align-items-center">
+                        <i class="fas fa-plus mr-2"></i> Request Schedule
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card card-table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-center mb-0 datatable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Class</th>
+                                        <th>Subject</th>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Remarks</th>
+                                        <th>Date Submitted</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for proposal in proposals %}
+                                    <tr>
+                                        <td>#{{ proposal.id }}</td>
+                                        <td><strong>{{ proposal.class_name }}</strong></td>
+                                        <td>{{ proposal.subject_name }}</td>
+                                        <td>{{ proposal.day }}</td>
+                                        <td>{{ proposal.start_time|time:"H:i" }} - {{ proposal.end_time|time:"H:i" }}</td>
+                                        <td>
+                                            {% if proposal.status == 'pending' %}
+                                                <span class="badge badge-warning text-dark">Pending</span>
+                                            {% elif proposal.status == 'approved' %}
+                                                <span class="badge badge-success text-dark">Approved</span>
+                                            {% else %}
+                                                <span class="badge badge-danger text-dark">Rejected</span>
+                                            {% endif %}
+                                        </td>
+                                        <td><small>{{ proposal.admin_remarks|default:"-" }}</small></td>
+                                        <td>{{ proposal.created_at|date:"M j, Y H:i" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-4">
+                                            No proposals found. Click "Request Schedule" to start.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -98,7 +98,7 @@ def my_results(request):
 def edit_exam(request, exam_id):
     # Sécurité : Bloquer les étudiants
     if getattr(request.user, 'is_student', False):
-        messages.error(request, "Accès refusé.")
+        messages.error(request, "Access denied.")
         return redirect('exam_list')
 
     # On récupère l'examen spécifique depuis la base de données
@@ -121,7 +121,7 @@ def edit_exam(request, exam_id):
 def delete_exam(request, exam_id):
     # Sécurité : Bloquer les étudiants
     if getattr(request.user, 'is_student', False):
-        messages.error(request, "Accès refusé.")
+        messages.error(request, "Access denied.")
         return redirect('exam_list')
 
     # On récupère l'examen et on le supprime

@@ -8,7 +8,7 @@ def department_list(request):
     departments = Department.objects.all()
     return render(request, 'department/departments.html', {'departments': departments})
 
-# 2. Ajouter un département — ADMIN seulement
+# 2. Add un département — ADMIN seulement
 @admin_required
 def add_department(request):
     if request.method == 'POST':
@@ -30,7 +30,7 @@ def add_department(request):
 
     return render(request, 'department/add-department.html')
 
-# 3. Modifier un département — ADMIN seulement
+# 3. Edit un département — ADMIN seulement
 @admin_required
 def edit_department(request, id):
     department = Department.objects.get(id=id)
@@ -46,7 +46,7 @@ def edit_department(request, id):
 
     return render(request, 'department/edit-department.html', {'department': department})
 
-# 4. Supprimer un département — ADMIN seulement
+# 4. Delete un département — ADMIN seulement
 @admin_required
 def delete_department(request, id):
     department = Department.objects.get(id=id)

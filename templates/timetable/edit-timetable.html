@@ -8,10 +8,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Modifier un Cours</h3>
+                    <h3 class="page-title">Edit un Cours</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{% url 'timetable_list' %}">Emploi du Temps</a></li>
-                        <li class="breadcrumb-item active">Modifier</li>
+                        <li class="breadcrumb-item"><a href="{% url 'timetable_list' %}">Timetable</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>
             </div>
@@ -25,60 +25,60 @@
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-12">
-                                    <h5 class="form-title"><span>Détails du cours</span></h5>
+                                    <h5 class="form-title"><span>Class Details</span></h5>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Nom du Professeur</label>
+                                        <label>Teacher Name</label>
                                         <input type="text" class="form-control" name="teacher_name" value="{{ timetable.teacher_name }}" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Matière</label>
+                                        <label>Subject</label>
                                         <input type="text" class="form-control" name="subject_name" value="{{ timetable.subject_name }}" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Classe</label>
+                                        <label>Class</label>
                                         <input type="text" class="form-control" name="class_name" value="{{ timetable.class_name }}" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Jour de la semaine</label>
+                                        <label>Day of week</label>
                                         <select class="form-control" name="day" required>
-                                            <option value="Lundi" {% if timetable.day == 'Lundi' %}selected{% endif %}>Lundi</option>
-                                            <option value="Mardi" {% if timetable.day == 'Mardi' %}selected{% endif %}>Mardi</option>
-                                            <option value="Mercredi" {% if timetable.day == 'Mercredi' %}selected{% endif %}>Mercredi</option>
-                                            <option value="Jeudi" {% if timetable.day == 'Jeudi' %}selected{% endif %}>Jeudi</option>
-                                            <option value="Vendredi" {% if timetable.day == 'Vendredi' %}selected{% endif %}>Vendredi</option>
-                                            <option value="Samedi" {% if timetable.day == 'Samedi' %}selected{% endif %}>Samedi</option>
+                                            <option value="Monday" {% if timetable.day == 'Monday' %}selected{% endif %}>Monday</option>
+                                            <option value="Tuesday" {% if timetable.day == 'Tuesday' %}selected{% endif %}>Tuesday</option>
+                                            <option value="Wednesday" {% if timetable.day == 'Wednesday' %}selected{% endif %}>Wednesday</option>
+                                            <option value="Thursday" {% if timetable.day == 'Thursday' %}selected{% endif %}>Thursday</option>
+                                            <option value="Friday" {% if timetable.day == 'Friday' %}selected{% endif %}>Friday</option>
+                                            <option value="Saturday" {% if timetable.day == 'Saturday' %}selected{% endif %}>Saturday</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Heure de début</label>
+                                        <label>Start Time</label>
                                         <input type="time" class="form-control" name="start_time" value="{{ timetable.start_time|time:'H:i' }}" required>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Heure de fin</label>
+                                        <label>End Time</label>
                                         <input type="time" class="form-control" name="end_time" value="{{ timetable.end_time|time:'H:i' }}" required>
                                     </div>
                                 </div>
                                 
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">Mettre à jour le cours</button>
+                                    <button type="submit" class="btn btn-primary">Update Timetable</button>
                                 </div>
                             </div>
                         </form>

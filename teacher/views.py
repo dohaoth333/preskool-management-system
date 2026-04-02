@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from department.models import Department
 from .models import Teacher
 from home_auth.decorators import admin_required
+from django.contrib import messages
 
 # 1. Liste des professeurs — ADMIN seulement
 @admin_required
@@ -13,13 +16,15 @@ def teacher_list(request):
 def teacher_dashboard(request):
     return render(request, 'teacher/teacher-dashboard.html')
 
-# 2. Ajouter un professeur — ADMIN seulement
+# 2. Add un professeur — ADMIN seulement
 @admin_required
 def add_teacher(request):
     if request.method == 'POST':
         teacher_id = request.POST.get('teacher_id')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
+        teacher_email = request.POST.get('teacher_email')
+        teacher_password = request.POST.get('teacher_password')
         gender = request.POST.get('gender')
         date_of_birth = request.POST.get('date_of_birth')
         mobile_number = request.POST.get('mobile_number')
@@ -43,19 +48,37 @@ def add_teacher(request):
             department=department
         )
         teacher.save()
+
+        # Créer l'utilisateur pour le professeur
+        if teacher_email and teacher_password:
+            User = get_user_model()
+            if not User.objects.filter(username=teacher_email).exists():
+                try:
+                    user = User.objects.create_user(
+                        username=teacher_email,
+                        email=teacher_email,
+                        password=teacher_password,
+                        first_name=first_name,
+                        last_name=last_name
+                    )
+                    user.is_teacher = True
+                    user.save()
+                except IntegrityError:
+                    messages.error(request, 'Un utilisateur avec cet email existe déjà ou une erreur d\'intégrité est survenue.')
+
         return redirect('teacher_list')
 
     departments = Department.objects.all()
     return render(request, 'teacher/add-teacher.html', {'departments': departments})
 
-# 3. Supprimer un professeur — ADMIN seulement
+# 3. Delete un professeur — ADMIN seulement
 @admin_required
 def delete_teacher(request, id):
     teacher = Teacher.objects.get(id=id)
     teacher.delete()
     return redirect('teacher_list')
 
-# 4. Modifier un professeur — ADMIN seulement
+# 4. Edit un professeur — ADMIN seulement
 @admin_required
 def edit_teacher(request, id):
     teacher = Teacher.objects.get(id=id)
@@ -83,4 +106,14 @@ def edit_teacher(request, id):
 @admin_required
 def view_teacher(request, id):
     teacher = Teacher.objects.get(id=id)
-    return render(request, 'teacher/teacher-details.html', {'teacher': teacher})
+    
+    User = get_user_model()
+    teacher_email = ""
+    users = User.objects.filter(first_name=teacher.first_name, last_name=teacher.last_name, is_teacher=True)
+    if users.exists():
+        teacher_email = users.first().email
+
+    return render(request, 'teacher/teacher-details.html', {
+        'teacher': teacher,
+        'teacher_email': teacher_email
+    })

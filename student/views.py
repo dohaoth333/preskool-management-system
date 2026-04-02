@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.db import IntegrityError
 from .models import Student, Parent
 from home_auth.decorators import admin_required, admin_or_teacher_required
 
@@ -22,6 +24,8 @@ def add_student(request):
         # 1. RÃ©cupÃ©rer les donnÃ©es de l'Ã©tudiant
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
+        student_email = request.POST.get('student_email')
+        student_password = request.POST.get('student_password')
         student_id = request.POST.get('student_id')
         gender = request.POST.get('gender')
         date_of_birth = request.POST.get('date_of_birth')
@@ -74,7 +78,24 @@ def add_student(request):
             parent=parent
         )
 
-        messages.success(request, 'Student added Successfully')
+        # 5. Créer l'utilisateur pour l'étudiant
+        if student_email and student_password:
+            User = get_user_model()
+            if not User.objects.filter(username=student_email).exists():
+                try:
+                    user = User.objects.create_user(
+                        username=student_email,
+                        email=student_email,
+                        password=student_password,
+                        first_name=first_name,
+                        last_name=last_name
+                    )
+                    user.is_student = True
+                    user.save()
+                except IntegrityError:
+                    messages.error(request, 'Un utilisateur avec cet email existe déjà ou une erreur d\'intégrité est survenue.')
+
+        messages.success(request, 'Student added successfully!')
         return redirect('student_list')
 
     return render(request, 'students/add-student.html')
@@ -83,7 +104,17 @@ def add_student(request):
 @admin_or_teacher_required
 def view_student(request, pk):
     student = get_object_or_404(Student, pk=pk)
-    return render(request, 'students/student-details.html', {'student': student})
+    
+    User = get_user_model()
+    student_email = ""
+    users = User.objects.filter(first_name=student.first_name, last_name=student.last_name, is_student=True)
+    if users.exists():
+        student_email = users.first().email
+
+    return render(request, 'students/student-details.html', {
+        'student': student,
+        'student_email': student_email
+    })
 
 # --- Formulaire et logique de modification --- ADMIN et TEACHER
 # --- Formulaire et logique de modification --- ADMIN et TEACHER

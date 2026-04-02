@@ -42,7 +42,7 @@
                                         </li>
                                         <li>
                                             <span class="title-span">Email : </span>
-                                            <span class="info-span">{{ student.parent.father_email }}</span>
+                                            <span class="info-span">{% if student_email %}{{ student_email }}{% else %}Non renseigné{% endif %}</span>
                                         </li>
                                         <li>
                                             <span class="title-span">Gender : </span>
