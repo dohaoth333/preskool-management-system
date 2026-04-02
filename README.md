@@ -14,7 +14,7 @@ Projet développé dans le cadre du module **Développement Web Avancé - Back-e
 
 
 
-https://github.com/user-attachments/assets/6d675fb3-32e3-4a3a-97e0-62635742bbb9
+https://youtu.be/Ht6fRnWgJPs
 
 
 ---
@@ -56,14 +56,13 @@ pip install -r requirements.txt
 **4. Créer la base de données locale :**
 *Remarque : La base de données db.sqlite3 n'est pas incluse dans le dépôt pour garantir l'intégrité des données de chaque développeur.*
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 
-**5. Créer un compte Super Administrateur :**
-Pour pouvoir accéder au panneau d'administration, lier les comptes et tester les fonctionnalités, vous devez créer un compte admin :
+**5. Initialiser les données et comptes de test (Obligatoire):**
+Nous avons inclus un script Python pour configurer automatiquement les comptes d'accès et les données de base (Départements, Étudiants, Profs, Matières) :
 ```bash
-python manage.py createsuperuser
+python seed_data.py
 ```
 *(Suivez les instructions dans le terminal pour choisir un nom d'utilisateur et un mot de passe).*
 
