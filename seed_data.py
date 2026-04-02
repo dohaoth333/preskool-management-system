@@ -1,5 +1,6 @@
 import os
 import django
+from home_auth.models import CustomUser
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'school.settings')
 django.setup()
@@ -98,3 +99,25 @@ for t in teachers_data:
     print(f"  {'[NEW]' if created else '[OK] '} Teacher: {obj.first_name} {obj.last_name} ({dept.department_name})")
 
 print("\n=== TOUT EST INSERE AVEC SUCCES ! ===")
+
+# ── COMPTES DE TEST (AUTH) ────────────────────────────────────
+# On crée un Admin, un Enseignant et un Etudiant pour le test
+users = [
+    {'username': 'admin1@gmail.com', 'email': 'admin@school.ma', 'password': 'doha12az', 'is_admin': True},
+    {'username': 'teacher@preskool.ma', 'email': 'teacher@school.ma', 'password': 'doha12az', 'is_teacher': True},
+    {'username': 'student1@gmail.com', 'email': 'student@school.ma', 'password': 'doha12az', 'is_student': True},
+]
+
+for u in users:
+    if not CustomUser.objects.filter(username=u['username']).exists():
+        user = CustomUser.objects.create_user(
+            username=u['username'],
+            email=u['email'],
+            password=u['password'],
+            is_admin=u.get('is_admin', False),
+            is_teacher=u.get('is_teacher', False),
+            is_student=u.get('is_student', False)
+        )
+        print(f"  [NEW] Utilisateur crée: {u['username']}")
+    else:
+        print(f"  [OK]  Utilisateur: {u['username']} (existe déjà)")
