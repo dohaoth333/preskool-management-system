@@ -77,18 +77,24 @@ def my_results(request):
         return redirect('dashboard')
 
     # 2. On cherche la fiche "Student" qui correspond à l'utilisateur connecté
-    try:
-        # On fait la correspondance avec le prénom et le nom
-        student_profile = Student.objects.get(
-            first_name=request.user.first_name, 
-            last_name=request.user.last_name
-        )
-        
+    # Utilisation de filter().first() pour éviter les erreurs s'il y a des doublons ou s'il n'y a pas de match strict
+    student_profile = Student.objects.filter(
+        first_name__iexact=request.user.first_name, 
+        last_name__iexact=request.user.last_name
+    ).first()
+    
+    # Si non trouvé, on tente d'inverser nom/prénom au cas où
+    if not student_profile:
+        student_profile = Student.objects.filter(
+            first_name__iexact=request.user.last_name, 
+            last_name__iexact=request.user.first_name
+        ).first()
+
+    if student_profile:
         # 3. On filtre les résultats : on ne prend QUE les notes de CET étudiant
         mes_notes = Result.objects.filter(student=student_profile)
-        
-    except Student.DoesNotExist:
-        # Si le compte utilisateur n'a pas encore de fiche étudiant correspondante
+    else:
+        # Si le profil n'est toujours pas trouvé
         mes_notes = []
         messages.warning(request, "Votre profil étudiant n'a pas été trouvé. Contactez l'administration.")
 
